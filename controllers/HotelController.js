@@ -67,9 +67,9 @@ exports.hotelDetail = [
 
 
 exports.hotelBook = [
-   async (req, res) => {
+    async (req, res) => {
         try {
-           
+
             // Validate request ...
             Hotel.findOneAndUpdate({_id: req.params.id}, {
                 startDay: req.body.startDay,
@@ -80,10 +80,10 @@ exports.hotelBook = [
                 if (err) {
                     return apiResponse.ErrorResponse(res, err);
                 } else {
-                    return apiResponse.successResponseWithData(res, "Hotel book Success.",docs);
+                    return apiResponse.successResponseWithData(res, "Hotel book Success.", docs);
                 }
             });
-            
+
         } catch (err) {
             //throw error in json response with status 500. 
             return apiResponse.ErrorResponse(res, err);
@@ -91,3 +91,29 @@ exports.hotelBook = [
     }
 ];
 
+exports.hotelNew = [
+    function (req, res) {
+        let _this = req.body;
+        try {
+            Hotel.create({
+                name: _this.name,
+                address: _this.address,
+                type: _this.type,
+                room: _this.room,
+                createdAt: _this.createdAt,
+                pricePerMonth: _this.pricePerMonth,
+                furniture: _this.furniture,
+                noted: _this.noted
+            }).then((hotel) => {
+                if (hotel !== null) {
+                    return apiResponse.successResponseWithData(res, "Hotel create success", hotel);
+                } else {
+                    return apiResponse.successResponseWithData(res, "Operation success", {});
+                }
+            });
+        } catch (err) {
+            //throw error in json response with status 500. 
+            return apiResponse.ErrorResponse(res, err);
+        }
+    }
+];
